@@ -29,6 +29,7 @@ import com.koakh.greendaostartup.model.repositories.NoteRepository;
 public class MainActivity extends ActionBarActivity {
 
   private Singleton mApp;
+  private Context mContext;
 
   /**
    * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -58,30 +59,34 @@ public class MainActivity extends ActionBarActivity {
     mViewPager = (ViewPager) findViewById(R.id.pager);
     mViewPager.setAdapter(mSectionsPagerAdapter);
 
-    //Get Application Singleton
-    mApp = Singleton.getInstance();
-    //get Context
-    Context context = this.getBaseContext();
+    // Get Application Singleton
+    mApp = ((Singleton) this.getApplicationContext());
+    mContext = this.getBaseContext();
 
-    //Use it from Repository
-    Note note1 = new Note();
-    note1.setText("Note1");
-    note1.setComment("Note1 comment");
-    //Insert
-    NoteRepository.insertOrUpdate(context, note1);
-    //Load
-    Log.d(mApp.TAG, String.format("Loaded Note1: %s", NoteRepository.get(context, 1).getText()));
+    try {
+      //Use it from Repository
+      Note note1 = new Note();
+      note1.setText("Note1");
+      note1.setComment("Note1 comment");
+      //Insert
+      NoteRepository.insertOrUpdate(mContext, note1);
+      //Load
+      Log.d(mApp.TAG, String.format("Loaded Note1: %s", NoteRepository.get(mContext, 1).getText()));
 
-    //Using Dao Object without Repository
-    Note note2 = new Note();
-    note2.setText("Note2");
-    note2.setComment("Comment Note2");
-    NoteDao noteDao = mApp.getDaoSession().getNoteDao();
-    noteDao.insert(note2);
-    Log.d(mApp.TAG, "Inserted new note2, ID: " + note2.getId());
-
-    //Load
-    Log.d(mApp.TAG, String.format("Loaded Note2: %s", noteDao.load(note2.getId()).getText()));
+      //Using Dao Object without Repository
+      Note note2 = new Note();
+      note2.setText("Note2");
+      note2.setComment("Comment Note2");
+      DaoSession daoSession = mApp.getDaoSession();
+      NoteDao noteDao = daoSession.getNoteDao();
+      noteDao.insert(note2);
+      Log.d(mApp.TAG, "Inserted new note2, ID: " + note2.getId());
+      //Load
+      Log.d(mApp.TAG, String.format("Loaded Note2: %s", noteDao.load(note2.getId()).getText()));
+    } catch (Exception e) {
+      Log.e(mApp.TAG, e.getMessage());
+      e.printStackTrace();
+    }
   }
 
   @Override

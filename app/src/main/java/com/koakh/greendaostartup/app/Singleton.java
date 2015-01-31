@@ -1,6 +1,7 @@
 package com.koakh.greendaostartup.app;
 
 import android.app.Application;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -15,14 +16,9 @@ public class Singleton extends Application {
   //Constants
   public final static String TAG = "GreenDaoStartup";
 
-  //Singleton
-  private static Singleton mOurInstance = new Singleton();
   //Dao
   public DaoSession daoSession;
 
-  public static Singleton getInstance() {
-    return mOurInstance;
-  }
 
   @Override
   public void onCreate() {
