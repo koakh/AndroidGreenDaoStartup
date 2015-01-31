@@ -62,31 +62,6 @@ public class MainActivity extends ActionBarActivity {
     // Get Application Singleton
     mApp = ((Singleton) this.getApplicationContext());
     mContext = this.getBaseContext();
-
-    try {
-      //Use it from Repository
-      Note note1 = new Note();
-      note1.setText("Note1");
-      note1.setComment("Note1 comment");
-      //Insert
-      NoteRepository.insertOrUpdate(mContext, note1);
-      //Load
-      Log.d(mApp.TAG, String.format("Loaded Note1: %s", NoteRepository.get(mContext, 1).getText()));
-
-      //Using Dao Object without Repository
-      Note note2 = new Note();
-      note2.setText("Note2");
-      note2.setComment("Comment Note2");
-      DaoSession daoSession = mApp.getDaoSession();
-      NoteDao noteDao = daoSession.getNoteDao();
-      noteDao.insert(note2);
-      Log.d(mApp.TAG, "Inserted new note2, ID: " + note2.getId());
-      //Load
-      Log.d(mApp.TAG, String.format("Loaded Note2: %s", noteDao.load(note2.getId()).getText()));
-    } catch (Exception e) {
-      Log.e(mApp.TAG, e.getMessage());
-      e.printStackTrace();
-    }
   }
 
   @Override
@@ -105,6 +80,43 @@ public class MainActivity extends ActionBarActivity {
 
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
+      return true;
+    }
+    else
+    //Use it from Repository
+    if (id == R.id.action_test_with_repository) {
+      try {
+        Note note = new Note();
+        note.setText("Note1");
+        note.setComment("Note1 comment");
+        //Insert
+        NoteRepository.insertOrUpdate(mContext, note);
+        Log.d(mApp.TAG, "Inserted new note1, ID: " + note.getId());
+        //Load
+        Log.d(mApp.TAG, String.format("Loaded Note: %s", NoteRepository.get(mContext, 1).getText()));
+      } catch (Exception e) {
+        Log.e(mApp.TAG, e.getMessage());
+        e.printStackTrace();
+      }
+      return true;
+    }
+    else
+    //Using Dao Object without Repository
+    if (id == R.id.action_test_with_dao_objects) {
+      try {
+        Note note = new Note();
+        note.setText("Note2");
+        note.setComment("Comment Note2");
+        DaoSession daoSession = mApp.getDaoSession();
+        NoteDao noteDao = daoSession.getNoteDao();
+        noteDao.insert(note);
+        Log.d(mApp.TAG, "Inserted new note2, ID: " + note.getId());
+        //Load
+        Log.d(mApp.TAG, String.format("Loaded Note: %s", noteDao.load(note.getId()).getText()));
+      } catch (Exception e) {
+        Log.e(mApp.TAG, e.getMessage());
+        e.printStackTrace();
+      }
       return true;
     }
 
