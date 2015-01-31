@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
     mViewPager = (ViewPager) findViewById(R.id.pager);
     mViewPager.setAdapter(mSectionsPagerAdapter);
 
-    // Get Application Singleton
+    // Proper Way to Get Application Singleton
     mApp = ((Singleton) this.getApplicationContext());
     mContext = this.getBaseContext();
   }
