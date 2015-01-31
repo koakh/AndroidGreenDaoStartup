@@ -15,7 +15,6 @@ public class Singleton extends Application {
   //Constants
   public final static String TAG = "GreenDaoStartup";
 
-
   //Singleton
   private static Singleton mOurInstance = new Singleton();
   //Dao

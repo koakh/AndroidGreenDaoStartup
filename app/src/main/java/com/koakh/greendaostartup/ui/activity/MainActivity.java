@@ -60,16 +60,28 @@ public class MainActivity extends ActionBarActivity {
 
     //Get Application Singleton
     mApp = Singleton.getInstance();
-
-    Note note = new Note();
-    note.setText("Note1");
-    note.setComment("Comment Note2");
-
+    //get Context
     Context context = this.getBaseContext();
-    NoteRepository.insertOrUpdate(context, note);
 
-    Note note2 = NoteRepository.get(context, 1);
-    Log.d(mApp.TAG, note2.getText());
+    //Use it from Repository
+    Note note1 = new Note();
+    note1.setText("Note1");
+    note1.setComment("Note1 comment");
+    //Insert
+    NoteRepository.insertOrUpdate(context, note1);
+    //Load
+    Log.d(mApp.TAG, String.format("Loaded Note1: %s", NoteRepository.get(context, 1).getText()));
+
+    //Using Dao Object without Repository
+    Note note2 = new Note();
+    note2.setText("Note2");
+    note2.setComment("Comment Note2");
+    NoteDao noteDao = mApp.getDaoSession().getNoteDao();
+    noteDao.insert(note2);
+    Log.d(mApp.TAG, "Inserted new note2, ID: " + note2.getId());
+
+    //Load
+    Log.d(mApp.TAG, String.format("Loaded Note2: %s", noteDao.load(note2.getId()).getText()));
   }
 
   @Override
